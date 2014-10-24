@@ -1,0 +1,13 @@
+$start	clear A ! load M ! load L ; début du programme
+		Q < %Bus ; Charger Q du bus
+$loop	if Vb1 then $add; Branchementvers add
+		if VB2 then $sub; branchementvers sub
+		goto $Rshift; branchementvers shift
+$add	add;  A +M
+		goto $Rshift;
+$sub	sub; A-M;
+$Rshift	asr ! dec L;
+		if Z then $loop
+		%Bus < A
+		%Bus < Q
+$halt	goto $halt

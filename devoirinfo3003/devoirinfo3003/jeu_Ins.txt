@@ -1,0 +1,14 @@
+C0=1 : clear A ; mettre zero dans A
+C1=1 : load M ; Charger M
+C2=1 : load L; charger le registre L
+C3=1:  Q < %Bus; Charger Q du bus
+C5 C4 =00: add ; Additionner les opérandes à l’entrée de UAL, mettre le résultat dans l’accumulateur,   
+C5 C4 =01: sub ; Soustraire les opérandes à l’entrée de UAL, mettre le résultat dans l’accumulateur
+C5 C4 =10: and ; and sur les opérandes à l’entrée de UAL, mettre le résultat dans l’accumulateur, 
+C5 C4 =11 : xor ; xor sur les opérandes à l’entrée de UAL, mettre le résultat dans l’accumulateur, 
+C6=1 : load A; charger le registre A
+C7=1: asr  A; Décaler A et Q à droite
+C8=1 :  dec L ; L=L-1, C8=1
+C9=1 : %Bus < A ; Mettre le contenu de A sur le bus, C9=1
+C10=1: %Bus < Q ; Mettre le contenu de Q sur le bus, C10=1
+C11=1 : inc L ; incrémenter L ; cette instruction n’est pas exploiter dans le programme ci-dessous, C11=1
