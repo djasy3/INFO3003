@@ -1,0 +1,253 @@
+Énoncé
+
+On souhaite implémenter le jeu d’instructions d’un nouveau microprocesseur dans un 
+
+microprogramme de format simple dont le mot de contrôle est composé de trois champs : Signaux de 
+
+contrôle, adresse de branchement, et la variable à tester. L’architecture de la structure de traitement 
+
+utilisée est essentiellement composée des éléments suivants :
+
+- UAL
+
+- Une mémoire RAM
+
+- plusieurs registres/compteurs
+
+- Bus
+
+On suppose que l’organisation de cette architecture permet de faire les différentes micro-instructions 
+
+à implémenter.
+
+Question :
+
+Faire un programme qui permet la traduction d’un jeu d’instructions décrit dans un fichier texte avec 
+
+un format spécifique, voir ci-dessous. Le fichier de sortie de votre programme doit être un fichier 
+
+texte aussi avec un format spécifique décrit ci-dessous.
+
+Jeux d’instructions
+
+Plusieurs types d’instructions sont possibles. Le mnémonique d’une instruction est composé d’une 
+
+chaine de caractères alphabétiques de taille maximal 6 caractère.
+
+Exemples : Clear, load, add, sub,and, xor,asr, dec,inc, etc. 
+
+Format de l’instruction avec un seul opérande
+
+<Étiquette>  Mnémonique < Nom du registre>; <commentaires>
+
+Format de l’instruction avec deux opérandes :
+
+<Étiquette>  Mnémonique <Noms de registres séparés par une virgule>; <commentaires>
+
+Certaines instructions n’ont pas d’arguments, exemple; Add, Sub, on suppose que la source et la 
+
+destination sont connues.
+
+Instructions de branchement 
+
+Conditionnel
+
+Format : < étiquette> If  variable booléenne then adresse ; <commentaires>
+
+Le Else du If est ignoré
+
+Inconditionnel
+
+Format :<étiquette> Go To adresse ; <commentaires>
+
+<>  : veut dire optionnel
+
+Nom du registre: une lettre majuscule or minuscule
+
+Étiquettes : une chaine de caractères ASCII qui commence par $ de taille inférieure à 6. Exemple 
+
+$bbb, $55
+
+Opérateurs
+
+< , > : transfert du contenu dans la direction de la flèche, exemple R > M, transférer R dans M
+
+Variables Booléennes (Logiques)
+
+Nom d’une variable : est formé deux lettres ‘ VB’ et d’un indice de type entier, le lettre VB ne sont pas 
+
+‘case sensitive’, elles peuvent être minuscules ou majuscules.
+
+Mots réservés
+
+%Bus : donnée sur le bus
+
+Signaux activés par les macro-instructions
+
+Fichier jeu-inst, de type texte (exemple)
+
+C0 = 1 : Clear A ; mettre zero dans A
+
+C1=1 : Laod M ; Charger M
+
+C2 =1: Load L; charger le registre L
+
+C3=1:  Q <%Bus; Charger Q du bus
+
+C5 C4=00: Add ; Additionner les opérandes à l’entrée de UAL, mettre le résultat dans l’accumulateur,   
+
+C5 C4 =01: Sub ; Soustraire les opérandes à l’entrée de UAL, mettre le résultat dans l’accumulateur
+
+C5 C4 =10: AND ; and sur les opérandes à l’entrée de UAL, mettre le résultat dans l’accumulateur, 
+
+C5 C4=11 : xor ; xor sur les opérandes à l’entrée de UAL, mettre le résultat dans l’accumulateur, 
+
+C5 C4=00 : AND; AND sur les opérandes à l’entrée de UAL, mettre le résultat dans l’accumulateur
+
+C6=1 : Load A; charger le registre A
+
+C7 =1: ASR  A; Décaler A et Q à droite
+
+C8 :  Dec L ; L=L-1, C8=1
+
+C9 : %Bus < A ; Mettre le contenu de A sur le bus, C9=1
+
+C10:  %Bus < Q ; Mettre le contenu de Q sur le bus, C10=1
+
+C11 : inc L ; incrémenter L ; cette instruction n’est pas exploiter dans le programme ci-dessous, C11=1
+
+Notes : Bien que l’exemple comporte 12 signaux seulement, votre programme doit pouvoir gérer 
+
+l’ajout de micro instructions supplémentaires et leurs signaux correspondants. On limite le nombre de 
+
+maximal de micro instructions différentes à 20, et le nombre maximal de signaux à 25. La taille du 
+
+micro programme est inférieure à 33 mots. 5 bits seront suffisants pour l’adresse du 
+
+microprogramme.
+
+Le format de micro instruction dans le ficher du jeu d’instructions est comme suit :
+
+Signaux à contrôler séparés par un blanc ou plusieurs blancs (C0 C1 par exemple) = un nombre de bit 
+
+égal au nombre de signaux (exemple 11) : la micro-instruction (par exemple Clear A, %Bus < A etc.) ; 
+
+description de l’instruction (sans virgule entre les mots). Chaque ligne du fichier texte est relative à 
+
+une seule macro-instruction.
+
+Microcontrôleur
+
+Le microcontrôleur est formé d’une mémoire, MPC, et un multiplexeur. Ils sont organisés comme 
+
+l’exemple 4.31 étudié en classe (voir figure plus loin). Le mot du micro contrôle est composé de 3 
+
+champs de gauche à droite: La condition à tester, l’adresse de branchement, les signaux de contrôle.
+
+Micro Program Counter (MPC)
+
+Le MPC est incrémenté par 1, càd MPC=MPC+1, si on met à son entrée de contrôle ‘0’ , autrement 
+
+MPC=MPC+ adresse de branchement.
+
+Entrées du multiplexeur du séquenceur
+
+Entrée i =0 est mis à ‘0’ : est toujours ‘0’ ; MPC = MPC+1
+
+Entrée i =0 est mis à ‘1’: est toujours ‘1’ ; Branchement inconditionnel, Go to adresse
+
+Entrée i+1 est assignée à la variable VB qui a le rang i dans l’ensemble de variables booléennes à 
+
+tester sachant que l’ensemble de variables peut être classé dans un ordre alphabétique croissant.
+
+Le nombre d’entrées du multiplexeur N = nombre de variable à tester + 2, ceci veut dire que le 
+
+nombre d’entrées de sélection du multiplexeur est log2(N).
+
+Format de du ficher de sortie de votre programme
+
+Il doit être similaire à la figure 4.35 (exemple étudié en classe, voir fichier plus loin), il est de type 
+
+texte. 
+
+Adresse du MI en décimal  condition à sélectionner adresse de branchement   signaux Commentaires
+
+Exemple d’un fichier d’entrée
+
+$start clear A ! Load M ! load L ; début du programme 
+
+$loop if Vb1 then $add; Branchementvers add 
+
+$add add;  A +M 
+
+$sub Sub; A-M;
+
+$Rshift ASR, dec L; 
+
+Q < Bus ; Charger Q du bus
+
+If VB2 then $sub; branchementvers sub 
+
+Go to $Rshift; branchementvers shift
+
+Go to $rshift;
+
+If Z then $loop 
+
+%Bus<A
+
+%Bus<Q
+
+$halt go to $Halt
+
+Conventions
+
+Le blanc, tabulation, retour à la ligne, sont des séparateurs
+
+‘!’ est un séparateur entre plusieurs instructions dans la même ligne
+
+Toutes les actions qui se trouvent dans la même ligne sont exécutées dans une seule micro-
+
+instruction.
+
+‘;’  le reste de la ligne est un commentaire suivi d’un retour à la ligne 
+
+On ne fait pas de distinction entre les minuscules et majuscules.
+
+Exigences
+
+Le devoir doit comprendre au moins les quatre fichiers suivants:
+
+1- La source du programme C++, appeler ce fichier Dev01, les noms des étudiants doit être inclus au 
+
+début de votre programme
+
+2-  le fichier texte qui contient le programme à implémenter en microprogramme sur lequel vous avez 
+
+essayé votre programme C++,  appeler ce fichier ‘input’
+
+3-  Le fichier texte qui comprend le jeu d'instructions considéré pour générer le ‘mapping’ de votre micro 
+
+programme, appeler ce fichier ‘jeu-inst’
+
+4-  Un fichier texte qui comprend le sortie générée par votre programme à partir du fichier (étape 
+
+2),  appeler ce fichier ‘output’
+
+5- On lit le ficher d’entrée comme on lit du clavier (Cin) et on écrit dans le fichier de sortie comme on écrit 
+
+sur l’écran (Cout). Lors de l’exécution on peut orienter l’entrée et la sortie en utilisant les caractères >, <. 
+
+Exemple : Program < input > output. On suppose que le programme se trouve le répertoire courant.
+
+6- l’initiative personnelle sera prise en compte lors de la correction
+
+7- Votre programme doit faire la gestion d’erreur comme un compilateur conventionnel, par exemple erreur 
+
+de syntaxe, instruction inconnue, etc
+
+8- La qualité de la programmation sera prise en compte lors de la correction
+
+9- Chaque groupe d’étudiants doit rencontrer le professeur au moins une semaine avant la date de remise 
+
+du devoir pour discuter l’état du progrès réalisé (pendant les heures de consultations).
