@@ -41,10 +41,11 @@ Go to $rshift;
 
 If Z then $loop 
 
-for full description af the programme go to : 
-
 %Bus<A
 
 %Bus<Q
 
 $halt go to $Halt
+
+
+for full description af the programme go to : 
